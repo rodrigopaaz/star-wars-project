@@ -1,9 +1,16 @@
-import React from 'react';
 import './App.css';
+import Header from './components/Header';
+import Table from './components/Table';
+import useApi from './hooks/useApi';
 
 function App() {
+  const { planets, erro, loading, planetsApi } = useApi();
+  console.log(planets);
   return (
-    <span>Hell, App!</span>
+    <div>
+      <Header />
+      <Table />
+    </div>
   );
 }
 
