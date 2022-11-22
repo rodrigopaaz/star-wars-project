@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import useApi from '../hooks/useApi';
+import useFilter from '../hooks/useFilter';
+import FilterContext from './StarWarsContext/FilterContext';
 
 export default function Table() {
-  const { planets: { results }, erro, loading, planetsApi } = useApi();
-  console.log(results);
+  const { filter } = useContext(FilterContext);
+  const { planets: { results } } = useApi();
+
+  const filteredResult = filter.length >= 1 ? filter : results;
   return (
     <div>
       <table>
@@ -51,7 +55,7 @@ export default function Table() {
           </tr>
         </thead>
         <tbody>
-          {results ? results.map((e) => (
+          {results ? filteredResult.map((e) => (
             <tr key={ e.name }>
               <th>
                 {e.name}
