@@ -15,8 +15,23 @@ function App() {
     return setFilter(filteredResults);
   };
 
+  const filterByColumn = (column, comparison, value) => {
+    if (comparison === 'maior que') {
+      const filteredResults = results.filter((e) => Number(e[column]) > Number(value));
+      return setFilter(filteredResults);
+    }
+    if (comparison === 'menor que') {
+      const filteredResults = results.filter((e) => Number(e[column]) < Number(value));
+      return setFilter(filteredResults);
+    }
+    if (comparison === 'igual a') {
+      const filteredResults = results.filter((e) => Number(e[column]) === Number(value));
+      return setFilter(filteredResults);
+    }
+  };
+
   return (
-    <FilterContext.Provider value={ { filter, filterPlanets } }>
+    <FilterContext.Provider value={ { filter, filterPlanets, filterByColumn } }>
       <div>
         <Header />
         <Table />
