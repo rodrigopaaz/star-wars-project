@@ -1,16 +1,14 @@
 import React, { useContext, useState } from 'react';
-import useApi from '../hooks/useApi';
-import useFilter from '../hooks/useFilter';
 import FilterContext from './StarWarsContext/FilterContext';
 
 export default function Header() {
-  const { planets: { results }, error, loading } = useApi();
-  const { filterPlanets, filterByColumn, handleMultipleFilters } = useContext(FilterContext);
+  const { filterPlanets, filterByColumn } = useContext(FilterContext);
   const planetDetails = ['population', 'orbital_period', 'diameter',
     'rotation_period', 'surface_water'];
-
+  const [filteredArray, setFilteredArray] = useState([planetDetails]);
+  const newArray = planetDetails.filter((e) => !filteredArray.includes(e));
   const [columnFilter,
-    setColumnFilter] = useState({ column: 'population',
+    setColumnFilter] = useState({ column: planetDetails[0],
     comparison: 'maior que',
     value: 0 });
   const { column, comparison,
@@ -39,7 +37,7 @@ export default function Header() {
           onChange={ ({ target: { name, value } }) => handleFilter(name, value) }
           value={ column }
         >
-          {planetDetails.map((e) => (
+          {newArray.map((e) => (
             <option
               key={ e }
               value={ e }
@@ -81,6 +79,12 @@ export default function Header() {
         data-testid="button-filter"
         onClick={ () => {
           filterByColumn(column, comparison, columnValue);
+          if (!filteredArray.includes(column)) {
+            setFilteredArray([...filteredArray, column]);
+          }
+          return setColumnFilter({ column: newArray[0],
+            comparison: 'maior que',
+            value: 0 });
         } }
       >
         Filter

@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import useApi from '../hooks/useApi';
-import useFilter from '../hooks/useFilter';
 import FilterContext from './StarWarsContext/FilterContext';
 
 export default function Table() {
