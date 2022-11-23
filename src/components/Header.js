@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
 import useApi from '../hooks/useApi';
+import useFilter from '../hooks/useFilter';
 import FilterContext from './StarWarsContext/FilterContext';
 
 export default function Header() {
   const { planets: { results }, error, loading } = useApi();
-  const { filterPlanets, filterByColumn } = useContext(FilterContext);
+  const { filterPlanets, filterByColumn, handleMultipleFilters } = useContext(FilterContext);
   const planetDetails = ['population', 'orbital_period', 'diameter',
     'rotation_period', 'surface_water'];
 
@@ -78,7 +79,9 @@ export default function Header() {
       <button
         type="button"
         data-testid="button-filter"
-        onClick={ () => filterByColumn(column, comparison, columnValue) }
+        onClick={ () => {
+          filterByColumn(column, comparison, columnValue);
+        } }
       >
         Filter
 
