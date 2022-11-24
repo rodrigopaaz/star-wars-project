@@ -34,6 +34,7 @@ function App() {
   return (
     <FilterContext.Provider
       value={ { filter,
+        setFilter,
         filterPlanets,
         filterByColumn } }
     >

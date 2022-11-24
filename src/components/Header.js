@@ -1,12 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import FilterContext from './StarWarsContext/FilterContext';
 
 export default function Header() {
+  const { setFilter } = useContext(FilterContext);
   const { filterPlanets, filterByColumn } = useContext(FilterContext);
   const planetDetails = ['population', 'orbital_period', 'diameter',
     'rotation_period', 'surface_water'];
   const [filteredArray, setFilteredArray] = useState([planetDetails]);
   const newArray = planetDetails.filter((e) => !filteredArray.includes(e));
+  console.log(filteredArray);
   const [columnFilter,
     setColumnFilter] = useState({ column: planetDetails[0],
     comparison: 'maior que',
@@ -17,6 +19,30 @@ export default function Header() {
   const handleFilter = (name, value) => {
     setColumnFilter({ ...columnFilter, [name]: value });
   };
+
+  const [addFilter, setAddFilter] = useState([]);
+  const [handleNewFilter, setHandleNewFilter] = useState([]);
+  console.log(addFilter, 'addfilter');
+  // setAddFilter([...addFilter, { column, comparison, columnValue }]);
+  const removeSingleFilter = (filter) => {
+    if (filter === addFilter[0]) {
+      setFilter('');
+      setAddFilter([]);
+    } else {
+      const newFilter = addFilter.filter((e) => !e.column.includes(filter.column)); // remove o array
+      setHandleNewFilter(newFilter);
+      setFilteredArray(filteredArray.filter((e) => e !== filter.column));
+      setColumnFilter({ column: newArray[0],
+        comparison: 'maior que',
+        value: 0 });
+    }
+  };
+
+  useEffect(() => {
+    /* setAddFilter(handleNewFilter);
+    console.log(handleNewFilter, 'handle'); */
+    handleNewFilter.forEach((e) => filterByColumn(e.column, e.comparison, e.columnValue));
+  }, [handleNewFilter]);
 
   return (
     <div>
@@ -74,15 +100,17 @@ export default function Header() {
           onChange={ ({ target: { name, value } }) => handleFilter(name, value) }
         />
       </label>
+
       <button
         type="button"
         data-testid="button-filter"
         onClick={ () => {
           filterByColumn(column, comparison, columnValue);
+          setAddFilter([...addFilter, { column, comparison, columnValue }]);
           if (!filteredArray.includes(column)) {
             setFilteredArray([...filteredArray, column]);
           }
-          return setColumnFilter({ column: newArray[0],
+          return setColumnFilter({ column: newArray[1],
             comparison: 'maior que',
             value: 0 });
         } }
@@ -90,6 +118,38 @@ export default function Header() {
         Filter
 
       </button>
+      <button
+        type="button"
+        data-testid="button-remove-filters"
+        onClick={ () => {
+          setFilter('');
+          setAddFilter([]);
+          setFilteredArray(filteredArray.filter((e) => e === planetDetails));
+        } }
+      >
+        Remove Filters
+      </button>
+
+      {addFilter.map((e) => (
+        <div
+          data-testid="filter"
+          key={ column + Math.random() }
+        >
+          <p>{e.column}</p>
+          <p>{e.comparison}</p>
+          <p>{e.columnValue}</p>
+          <button
+            type="button"
+            onClick={ () => {
+              setFilter('');
+
+              removeSingleFilter(e);
+            } }
+          >
+            Remove
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
