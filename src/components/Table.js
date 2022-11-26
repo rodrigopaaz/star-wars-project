@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
-import useApi from '../hooks/useApi';
 import FilterContext from './StarWarsContext/FilterContext';
 
 export default function Table() {
-  const { filter } = useContext(FilterContext);
-  const { planets: { results } } = useApi();
+  const { filter, results } = useContext(FilterContext);
 
   const filteredResult = filter.length >= 1 ? filter : results;
   return (
@@ -54,49 +52,50 @@ export default function Table() {
           </tr>
         </thead>
         <tbody>
-          {results ? filteredResult.map((e) => (
-            <tr key={ e.name }>
-              <th>
-                {e.name}
-              </th>
-              <th>
-                {e.rotation_period}
-              </th>
-              <th>
-                {e.orbital_period}
-              </th>
-              <th>
-                {e.diameter}
-              </th>
-              <th>
-                {e.climate}
-              </th>
-              <th>
-                {e.gravity}
-              </th>
-              <th>
-                {e.terrain}
-              </th>
-              <th>
-                {e.surface_water}
-              </th>
-              <th>
-                {e.population}
-              </th>
-              <th>
-                {e.films}
-              </th>
-              <th>
-                {e.created}
-              </th>
-              <th>
-                {e.edited}
-              </th>
-              <th>
-                {e.url}
-              </th>
+          {results ? filteredResult
+            .map((e) => (
+              <tr key={ e.name }>
+                <th data-testid="planet-name">
+                  {e.name}
+                </th>
+                <th>
+                  {e.rotation_period}
+                </th>
+                <th>
+                  {e.orbital_period}
+                </th>
+                <th>
+                  {e.diameter}
+                </th>
+                <th>
+                  {e.climate}
+                </th>
+                <th>
+                  {e.gravity}
+                </th>
+                <th>
+                  {e.terrain}
+                </th>
+                <th>
+                  {e.surface_water}
+                </th>
+                <th>
+                  {e.population}
+                </th>
+                <th>
+                  {e.films}
+                </th>
+                <th>
+                  {e.created}
+                </th>
+                <th>
+                  {e.edited}
+                </th>
+                <th>
+                  {e.url}
+                </th>
 
-            </tr>))
+              </tr>))
 
             : null}
         </tbody>
