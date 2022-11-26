@@ -6,6 +6,7 @@ export default function Header() {
   const { filterPlanets, filterByColumn } = useContext(FilterContext);
   const planetDetails = ['population', 'orbital_period', 'diameter',
     'rotation_period', 'surface_water'];
+
   const [filteredArray, setFilteredArray] = useState([planetDetails]);
   const newArray = planetDetails.filter((e) => !filteredArray.includes(e));
   const [columnFilter,
@@ -28,7 +29,7 @@ export default function Header() {
 
   const [addFilter, setAddFilter] = useState([]);
   const [handleNewFilter, setHandleNewFilter] = useState([]);
-  // setAddFilter([...addFilter, { column, comparison, columnValue }]);
+
   const removeSingleFilter = (filter) => {
     if (filter === addFilter[0]) {
       setFilter('');
@@ -50,11 +51,6 @@ export default function Header() {
     console.log(handleNewFilter, 'handle'); */
     handleNewFilter.forEach((e) => filterByColumn(e.column, e.comparison, e.columnValue));
   }, [handleNewFilter]);
-
-  useEffect(() => {
-    console.log(sortFilter, 'sort');
-    setFilter('');
-  }, [sortFilter]);
 
   useEffect(() => {
     /* setAddFilter(handleNewFilter);
@@ -205,7 +201,6 @@ export default function Header() {
             type="button"
             onClick={ () => {
               setFilter('');
-
               removeSingleFilter(e);
             } }
           >
