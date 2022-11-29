@@ -1,9 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
+import FilterSort from './pages/FilterSort';
 import FilterContext from './StarWarsContext/FilterContext';
 
 export default function Header() {
-  const { setFilter, sortTable } = useContext(FilterContext);
+  const { setFilter } = useContext(FilterContext);
   const { filterPlanets, filterByColumn } = useContext(FilterContext);
+
   const planetDetails = ['population', 'orbital_period', 'diameter',
     'rotation_period', 'surface_water'];
 
@@ -20,46 +22,25 @@ export default function Header() {
     setColumnFilter({ ...columnFilter, [name]: value });
   };
 
-  const [sortFilter,
-    setSortFilter] = useState({ column, order: 'ASC' });
-
-  const handleSort = (name, value) => {
-    setSortFilter({ ...sortFilter, [name]: value });
-  };
-
   const [addFilter, setAddFilter] = useState([]);
   const [handleNewFilter, setHandleNewFilter] = useState([]);
 
   const removeSingleFilter = (filter) => {
     if (filter === addFilter[0]) {
       setFilter('');
-      setAddFilter([]);
-    } else {
-      const newFilter = addFilter.filter((e) => !e.column.includes(filter.column)); // remove o array
-      setHandleNewFilter(newFilter);
-      setFilteredArray(filteredArray.filter((e) => e !== filter.column));
-      setColumnFilter({ column: newArray[0],
-        comparison: 'maior que',
-        value: 0 });
+      return setAddFilter([]);
     }
+    const newFilter = addFilter.filter((e) => !e.column.includes(filter.column)); // remove o array
+    setHandleNewFilter(newFilter);
+    setFilteredArray(filteredArray.filter((e) => e !== filter.column));
+    setColumnFilter({ column: newArray[0],
+      comparison: 'maior que',
+      value: 0 });
   };
 
-  const [teste, setTeste] = useState();
-
   useEffect(() => {
-    /* setAddFilter(handleNewFilter);
-    console.log(handleNewFilter, 'handle'); */
     handleNewFilter.forEach((e) => filterByColumn(e.column, e.comparison, e.columnValue));
   }, [handleNewFilter]);
-
-  useEffect(() => {
-    /* setAddFilter(handleNewFilter);
-    console.log(handleNewFilter, 'handle'); */
-    if (teste) {
-      sortTable(teste);
-      setSortFilter(teste);
-    }
-  }, [teste]);
 
   return (
     <div>
@@ -136,46 +117,7 @@ export default function Header() {
 
       </button>
 
-      <select
-        data-testid="column-sort"
-        onChange={ ({ target: { name, value } }) => handleSort(name, value) }
-        name="column"
-      >
-        {planetDetails.map((e) => (
-          <option
-            key={ e }
-            value={ e }
-
-          >
-            {e}
-          </option>))}
-      </select>
-      <input
-        type="radio"
-        value="ASC"
-        name="order"
-        data-testid="column-sort-input-asc"
-        onChange={ ({ target: { name, value } }) => handleSort(name, value) }
-
-      />
-      <input
-        type="radio"
-        value="DESC"
-        name="order"
-        data-testid="column-sort-input-desc"
-        onChange={ ({ target: { name, value } }) => handleSort(name, value) }
-
-      />
-      <button
-        type="button"
-        data-testid="column-sort-button"
-        onClick={ () => {
-          console.log(sortFilter, 'botao');
-          setTeste(sortFilter);
-        } }
-      >
-        Ordenar
-      </button>
+      <FilterSort />
 
       <button
         type="button"
