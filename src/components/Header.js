@@ -36,6 +36,7 @@ export default function Header() {
     setColumnFilter({ column: newArray[0],
       comparison: 'maior que',
       value: 0 });
+    return setAddFilter(newFilter);
   };
 
   useEffect(() => {
